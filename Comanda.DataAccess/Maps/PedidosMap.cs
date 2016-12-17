@@ -14,9 +14,11 @@ namespace Comanda.DataAccess.Maps
 
             Property(x => x.ClienteId).HasColumnName("ClienteId");
             Property(x => x.ProdutoId).HasColumnName("ProdutoId");
+            Property(x => x.SituacaoId).HasColumnName("SituacaoId");
 
             HasRequired<ClienteModel>(x => x.Cliente).WithMany(x => x.Pedidos);
-            HasRequired<ProdutoModel>(x => x.Produto).WithMany(x => x.Pedidos);                        
+            HasRequired<ProdutoModel>(x => x.Produto).WithMany(x => x.Pedidos);
+            HasRequired<SituacaoModel>(x => x.Situacao).WithMany(x => x.Pedidos);            
 
             ToTable("dbo.Pedidos");
         }

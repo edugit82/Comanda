@@ -59,6 +59,7 @@
     <Compile Include="Maps\ClientesMap.cs" />
     <Compile Include="Maps\PedidosMap.cs" />
     <Compile Include="Maps\ProdutosMap.cs" />
+    <Compile Include="Maps\SituacaoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

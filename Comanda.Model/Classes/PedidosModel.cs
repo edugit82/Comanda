@@ -35,6 +35,11 @@ namespace Comanda.Model.Classes
         /// Lista Produtos.
         /// </summary>
         public virtual ProdutoModel Produto { get; set; }
+        public int SituacaoId { get; set; }
+        /// <summary>
+        /// Lista situação
+        /// </summary>
+        public virtual SituacaoModel Situacao { get; set; }
         
     }
 }
