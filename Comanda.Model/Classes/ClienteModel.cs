@@ -11,11 +11,12 @@ namespace Comanda.Model.Classes
     {
         public ClienteModel()
         {
-            this.Produtos = new HashSet<ProdutoModel>();
+            this.Pedidos = new HashSet<PedidosModel>();            
         }
         /// <summary>
         /// Chave Primária da Tabela Cliente
         /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int ClienteId { get; set; }
         /// <summary>
@@ -29,8 +30,8 @@ namespace Comanda.Model.Classes
         /// </summary>        
         public string Comentario { get; set; }
         /// <summary>
-        /// Lista Produtos.
+        /// Lista Pedidos
         /// </summary>
-        public virtual ICollection<ProdutoModel> Produtos { get; set; }
+        public virtual ICollection<PedidosModel> Pedidos { get; set; }        
     }
 }

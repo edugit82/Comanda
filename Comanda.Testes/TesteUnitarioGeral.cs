@@ -11,10 +11,7 @@ namespace Comanda.Testes
         [TestMethod]
         public void Teste01()
         {
-            using (var context = new PedidosContext())
-            {
-
-            }
+            
         }
     }
 }

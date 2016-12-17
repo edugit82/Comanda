@@ -9,7 +9,7 @@ namespace Comanda.Model.Classes
     /// Tabela Pedidos
     /// </summary>
     public class PedidosModel
-    {       
+    {        
         /// <summary>
         /// Chave primária da tabela pedidos
         /// </summary>
@@ -19,6 +19,22 @@ namespace Comanda.Model.Classes
         /// Quantide do produto do pedido
         /// </summary>
         public int Qtd { get; set; }
+        /// <summary>
+        /// Cliente Id
+        /// </summary>
+        public int ClienteId { get; set; }
+        /// <summary>
+        /// Lista Clientes
+        /// </summary>
+        public virtual ClienteModel Cliente { get; set; }
+        /// <summary>
+        /// Produto Id
+        /// </summary>
+        public int ProdutoId { get; set; } 
+        /// <summary>
+        /// Lista Produtos.
+        /// </summary>
+        public virtual ProdutoModel Produto { get; set; }
         
     }
 }

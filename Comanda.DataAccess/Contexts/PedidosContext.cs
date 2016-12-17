@@ -20,17 +20,7 @@ namespace Comanda.DataAccess.Contexts
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Configurations.Add(new ClientesMap());
             modelBuilder.Configurations.Add(new ProdutosMap());
-            modelBuilder.Configurations.Add(new PedidosMap());
-
-            modelBuilder.Entity<ClienteModel>()
-                .HasMany<ProdutoModel>(s => s.Produtos)
-                .WithMany(c => c.Clientes)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("ClienteRefId");
-                    cs.MapRightKey("ProdutoRefId");
-                    cs.ToTable("dbo.Pedidos");
-                });
+            modelBuilder.Configurations.Add(new PedidosMap());  
         }
     }
 }
