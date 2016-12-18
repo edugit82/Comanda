@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Comanda.DataAccess.Maps
 {
-    public class PedidosMap : EntityTypeConfiguration<PedidosModel>
+    internal class PedidosMap : EntityTypeConfiguration<PedidosModel>
     {
-        public PedidosMap() : base()
+        internal PedidosMap() : base()
         {
             HasKey(x => x.DataHora);
 

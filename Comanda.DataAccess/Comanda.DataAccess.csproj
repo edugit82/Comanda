@@ -80,6 +80,10 @@
     <Compile Include="Maps\SituacaoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tabelas\Clientes.cs" />
+    <Compile Include="Tabelas\Pedidos.cs" />
+    <Compile Include="Tabelas\Produtos.cs" />
+    <Compile Include="Tabelas\Situacao.cs" />
+    <Compile Include="Views\PedidosView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -97,9 +101,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

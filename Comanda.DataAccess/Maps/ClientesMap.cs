@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Comanda.DataAccess.Maps
 {
-    public class ClientesMap : EntityTypeConfiguration<ClienteModel>
+    internal class ClientesMap : EntityTypeConfiguration<ClienteModel>
     {
-        public ClientesMap() : base()
+        internal ClientesMap() : base()
         {
             HasKey(x => x.ClienteId);
 

@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Comanda.DataAccess.Maps
 {
-    public class SituacaoMap : EntityTypeConfiguration<SituacaoModel>
+    internal class SituacaoMap : EntityTypeConfiguration<SituacaoModel>
     {
-        public SituacaoMap()
+        internal SituacaoMap()
         {
             HasKey(x => x.SituacaoId);
 

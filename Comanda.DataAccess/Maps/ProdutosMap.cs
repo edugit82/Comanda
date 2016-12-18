@@ -3,9 +3,9 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Comanda.DataAccess.Maps
 {
-    public class ProdutosMap : EntityTypeConfiguration<ProdutoModel>
+    internal class ProdutosMap : EntityTypeConfiguration<ProdutoModel>
     {
-        public ProdutosMap() : base()
+        internal ProdutosMap() : base()
         {
             HasKey(x => x.ProdutoId);
 

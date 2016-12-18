@@ -5,16 +5,16 @@ using Comanda.DataAccess.Maps;
 
 namespace Comanda.DataAccess.Contexts
 {
-    public class PedidosContext : DbContext
+    internal class PedidosContext : DbContext
     {
-        public PedidosContext() : base("PedidosContext")
+        internal PedidosContext() : base("PedidosContext")
         {
 
         }
-        public DbSet<ClienteModel> Clientes { get; set; }
-        public DbSet<ProdutoModel> Produtos { get; set; }
-        public DbSet<PedidosModel> Pedidos { get; set; }
-        public DbSet<SituacaoModel> Situacao { get; set; }        
+        internal DbSet<ClienteModel> Clientes { get; set; }
+        internal DbSet<ProdutoModel> Produtos { get; set; }
+        internal DbSet<PedidosModel> Pedidos { get; set; }
+        internal DbSet<SituacaoModel> Situacao { get; set; }        
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

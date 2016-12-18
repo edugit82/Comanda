@@ -7,15 +7,15 @@ using Comanda.Excecao;
 
 namespace Comanda.DataAccess.Tabelas
 {
-    public static class Clientes
-    {        
-        public static void Add(ClienteModel model)
+    public static class Pedidos
+    {
+        public static void Add(PedidosModel model)
         {
             try
             {
                 using (var context = new PedidosContext())
                 {
-                    context.Clientes.Add(model);
+                    context.Pedidos.Add(model);
                     context.SaveChanges();
                 }
             }
@@ -25,20 +25,20 @@ namespace Comanda.DataAccess.Tabelas
                 throw ex;
             }
         }
-        public static void Update(ClienteModel model)
+        public static void Update(PedidosModel model)
         {
             using (var context = new PedidosContext())
-            {                               
+            {
                 using (var transaction = context.Database.BeginTransaction())
                 {
                     try
                     {
-                        var entity = context.Clientes.Find(model.ClienteId);
+                        var entity = context.Pedidos.Find(model.DataHora);
 
-                        context.Clientes.Remove(entity);
+                        context.Pedidos.Remove(entity);
                         context.SaveChanges();
 
-                        context.Clientes.Add(model);
+                        context.Pedidos.Add(model);
                         context.SaveChanges();
 
                         transaction.Commit();
@@ -54,13 +54,13 @@ namespace Comanda.DataAccess.Tabelas
                 }
             }
         }
-        public static void Remove(ClienteModel model)
+        public static void Remove(PedidosModel model)
         {
             try
             {
                 using (var context = new PedidosContext())
                 {
-                    context.Clientes.Remove(model);
+                    context.Pedidos.Remove(model);
                     context.SaveChanges();
                 }
             }
@@ -70,15 +70,15 @@ namespace Comanda.DataAccess.Tabelas
                 throw ex;
             }
         }
-        public static List<ClienteModel> ListaTotal()
+        public static List<PedidosModel> ListaTotal()
         {
-            var retorno = new List<ClienteModel>();
+            var retorno = new List<PedidosModel>();
 
             try
             {
                 using (var context = new PedidosContext())
                 {
-                    retorno = context.Clientes.OrderBy(x => x.ClienteId).ToList();
+                    retorno = context.Pedidos.OrderBy(x => x.DataHora).ToList();
                 }
             }
             catch (Exception ex)
@@ -86,9 +86,8 @@ namespace Comanda.DataAccess.Tabelas
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
                 throw ex;
             }
-            
+
             return retorno;
         }
-        
     }
 }
