@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="ConteinerGridClientes" style="width:100%;">
+    @Html.Partial("~/Views/PartialViews/GridClientes.cshtml")
+</div>
+<div id="ConteinerEditarCliente">
+    @Html.Partial("~/Views/PartialViews/EditarCliente.cshtml",new Comanda.Model.Classes.ClienteModel())
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#menu_principal > ul > li.clientes").addClass("active");
+    });
+</script>

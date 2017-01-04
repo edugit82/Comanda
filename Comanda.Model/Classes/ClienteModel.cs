@@ -16,8 +16,9 @@ namespace Comanda.Model.Classes
         /// <summary>
         /// Chave Primária da Tabela Cliente
         /// </summary>
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClienteId { get; set; }
         /// <summary>
         /// Nome do cliente, campo obrigatório

@@ -33,13 +33,8 @@ namespace Comanda.DataAccess.Tabelas
                 {
                     try
                     {
-                        var entity = context.Produtos.Find(model.ProdutoId);
-
-                        context.Produtos.Remove(entity);
-                        context.SaveChanges();
-
-                        context.Produtos.Add(model);
-                        context.SaveChanges();
+                        context.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                        context.SaveChanges();   
 
                         transaction.Commit();
 
@@ -70,24 +65,28 @@ namespace Comanda.DataAccess.Tabelas
                 throw ex;
             }
         }
-        public static List<ProdutoModel> ListaTotal()
+
+        public static List<ProdutoModel> ListaTotal 
         {
-            var retorno = new List<ProdutoModel>();
-
-            try
+            get
             {
-                using (var context = new PedidosContext())
+                var retorno = new List<ProdutoModel>();
+
+                try
                 {
-                    retorno = context.Produtos.OrderBy(x => x.ProdutoId).ToList();
+                    using (var context = new PedidosContext())
+                    {
+                        retorno = context.Produtos.OrderBy(x => x.ProdutoId).ToList();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
-            }
+                catch (Exception ex)
+                {
+                    new Excecao.Excecao().GravaExcecao(ex, "{}");
+                    throw ex;
+                }
 
-            return retorno;
-        }
+                return retorno;
+            }
+        }        
     }
 }

@@ -1,0 +1,134 @@
+﻿
+<table class="table table-hover" id="GridPedidos">
+    <thead class="thead-inverse">
+        <tr>
+            <th>DataHora</th>
+            <th>Cliente</th>
+            <th>Comentário</th>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Qtd</th>
+            <th>Situação</th>
+            <th>Excluir</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot class="tfoot-inverse"></tfoot>
+</table>
+<style type="text/css">
+    table > tfoot.tfoot-inverse  
+    {
+        background-color:#373a3c;
+        color:white;
+        font-weight:bolder;
+    }
+    table > tfoot.tfoot-inverse > tr > td > label.Seleciona
+    {
+        float:left;
+    }
+    table > tfoot.tfoot-inverse > tr > td > label.Pago
+    {
+        float:left;
+        margin-left:20px;
+    }
+    table > tfoot.tfoot-inverse > tr > td > label.Pago > input
+    {
+        margin-right:10px;
+    }
+    table > tfoot.tfoot-inverse > tr > td > label.Total
+    {
+        float:right;
+    }
+</style>
+<script type="text/javascript">   
+    var gridpedidosparam = {
+        "ClienteId": 0,
+        "ProdutoId": 0,
+        "DataInicio": "01/01/2000",
+        "DataFim": "01/01/2000",
+        "Situacao": 3
+    };
+    function GridPedidosLoad(gridpedidosparam) {
+        MontaAjax('@Url.Action("FiltroListaPedidos", "Comanda")', gridpedidosparam, function (data) {
+            $("table#GridPedidos > tbody").empty();
+            $("table#GridPedidos > tfoot").empty();
+            $("table#GridPedidos > tbody").append(AlimentaGrid(data));
+
+            $(".deletar").on("click", function () {
+                var param = { "datahora": $(this).attr("title") };
+                MontaAjax('@Url.Action("DeletaPedido", "Comanda")', param, function (data) {
+                    GridPedidosLoad(gridpedidosparam);
+                });
+            });
+                        
+            var total = 0;
+            $("#GridPedidos > tbody > tr").each(function () {
+                var preco = parseFloat($(this).children().eq(4).text());
+                var qtd = parseInt($(this).children().eq(5).text());
+                var situacao = $(this).children().eq(6).text() == "Pago" ? 1 : 0;
+
+                total += situacao == 1 ? 0 : (preco * qtd) * (-1);
+            });
+
+            var textfoot = "<tr><td colspan='9'>" +
+                           "<label class='Seleciona'>Seleciona tudo<input type='checkbox' style='margin-left:5px;' class='form-check-input tudo'></label>" +
+                           "<label class='Pago'><input class='form-check-input' type='radio' name='rdSituacaoTotal' id='rdSituacaoPagoTotal' value='1'>Pago</label>" +
+                           "<label class='Pago'><input class='form-check-input' type='radio' name='rdSituacaoTotal' id='rdSituacaoNaoTotal' value='2'>Não Pago</label>" +
+                           "<label class='Total'><span>Total: </span>" + MascaraDinheiro(total) + "</label>" +
+                           "</td></tr>"
+
+            if ($("table#GridPedidos").parent().attr("id") == "ConteinerGridListaPedidos") {
+
+                $("table#GridPedidos > tbody > tr").append("<td><input type='checkbox' class='form-check-input'></td>");
+                $("table#GridPedidos > tfoot").append(textfoot);
+                $("input[type='checkbox'].tudo").on("click", function () {
+                    $("#GridPedidos > tbody > tr > td:nth-child(9) > input").prop("checked", $(this).prop("checked"));
+                });
+
+                $("label.Pago > input[name='rdSituacaoTotal']").on("click", function () {                    
+                    var valor = $(this).val();                    
+                    $("#GridPedidos > tbody > tr > td:nth-child(9) > input[type='checkbox']:checked").each(function () {                        
+                        var thisindex = $("#GridPedidos > tbody > tr > td:nth-child(9) > input[type='checkbox']").index($(this));
+                        var datahora = StringToDateTime($($(this).parent().parent().children()[0]).text());
+                        var param =
+                        {
+                            "DataHora": datahora,
+                            "Situacao": valor
+                        }
+                        
+                        MontaAjax('@Url.Action("AtualizaSituacaoPedido", "Comanda")', param, function (data) {
+                            GridPedidosLoad(gridpedidosparam);                                                       
+                        });                        
+                    });
+                   
+                });                
+            }
+        });
+    }
+    function AlimentaGrid(data) {
+        var retorno = "";
+        var islistapedidos = $("table#GridPedidos").parent().attr("id") == "ConteinerGridPedidos";
+
+        for (var x in data)
+        {
+            if ((x < 10 && islistapedidos) || (!islistapedidos)) {
+                retorno += LinhaGridTemplate(data[x].DataHora, data[x].Cliente, data[x].Comentario, data[x].Produto, data[x].Preco, data[x].Qtd, data[x].Situacao, data[x].Excluir);
+            }
+        }
+        return retorno;
+    }
+    function LinhaGridTemplate(DataHora, Cliente, Comentario, Produto, Preco, Qtd, Situacao, Excluir) {
+
+     var retorno =  '<tr>' +
+                      '<th scope="row">' + DataHora + '</th>' +
+                      '<td>' + Cliente + '</td>' +
+                      '<td>' + Comentario + '</td>' +
+                      '<td>' + Produto + '</td>' +
+                      '<td>' + Preco + '</td>' +
+                      '<td>' + Qtd + '</td>' +
+                      '<td>' + Situacao + '</td>' +
+                      '<td><a href="#GridPedidos" class="deletar" title="' + Excluir + '"><img style="width:30px;height:30px;" src="@Url.Content("~/Content/images/lixeira.jpg")" /></a></td>' +
+                       '</tr>'
+        return retorno;
+    }
+</script>

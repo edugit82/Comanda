@@ -2,7 +2,7 @@
 
 namespace Comanda.Model.Classes
 {
-    public class PedidosViewModel
+    public class VPedidosModel
     {
         public DateTime DataHora { get; set; }
         public int Qtd { get; set; }

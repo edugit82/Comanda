@@ -18,7 +18,7 @@ namespace Comanda.Excecao
                     retorno = JsonConvert.DeserializeObject<List<ExcecaoModel>>(file.ReadToEnd());
                 }
             }
-            return retorno;
+            return retorno == null ? new List<ExcecaoModel>() : retorno;
         }
         public void SalvaArquivo(string endereco, ExcecaoModel dado)
         {

@@ -20,6 +20,10 @@ namespace Comanda.Model.Classes
         /// </summary>
         public int Qtd { get; set; }
         /// <summary>
+        /// Preço do pedido
+        /// </summary>
+        public double Preco { get; set; }
+        /// <summary>
         /// Cliente Id
         /// </summary>
         public int ClienteId { get; set; }

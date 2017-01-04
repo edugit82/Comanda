@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Comanda.Model.Structs;
+using System.Configuration;
 
 namespace Comanda.Excecao
 {
@@ -11,19 +12,7 @@ namespace Comanda.Excecao
         private string endereco { get; set; }
         public Excecao()
         {
-            var bbase = System.Environment.CurrentDirectory;
-            var split = bbase.Split("\\".ToCharArray()).ToList();
-
-            foreach (var x in split)
-            {
-                if (x != "Comanda")
-                    this.endereco += x + @"\";
-                else
-                {
-                    this.endereco += x + @"\" + "Comanda.Excecao" + @"\" + "LogErros" + @"\" + "LogErros.json";
-                    break;
-                }
-            }
+            this.endereco = ConfigurationManager.AppSettings["ErrorPath"].ToString();                       
         }
         public void GravaExcecao(Exception ex, string parametros)
         {

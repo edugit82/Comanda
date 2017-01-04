@@ -1,0 +1,153 @@
+﻿@model List<Comanda.Model.Classes.SituacaoModel>
+
+@{
+    ViewBag.Title = "ListaPedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ambosval = Model[1].SituacaoId + 1;
+}
+
+<style>
+    .datahora
+    {
+        width: 200px;
+    }
+</style>
+
+<div id="FiltroPedidos" class="container margin-bottom">
+    <input type="hidden" id="hdnClienteId" value="0">
+    <label for="txtCliente">Cliente:</label>
+    <input type="text" class="form-control margin-bottom" id="txtCliente" autocomplete="off">
+
+    <input type="hidden" id="hdnProdutoId" value="0">
+    <label for="txtProduto">Produto:</label>
+    <input type="text" class="form-control margin-bottom" id="txtProduto" autocomplete="off">
+
+    <div class="row margin-bottom">
+        <div class="col-md-4">
+            <label>De:</label>
+            <input type="text" class="form-control datahora" id="txtDatainicio" autocomplete="off">
+        </div>
+        <div class="col-md-4">
+            <label>Até:</label>
+            <input type="text" class="form-control datahora" id="txtDatafim" autocomplete="off" disabled>
+        </div>
+    </div>
+
+    <div style="display:block;width:100%;" >
+        <div style="float:left;">
+            <input class="form-check-input margin-bottom" type="radio" name="rdSituacao" id="rdSituacaoPago" value="@Model[0].SituacaoId">
+            @Model[0].Descricao.Trim()
+        </div>
+        <div class="form-check-inline" style="float:left;">
+            <input class="form-check-input margin-bottom" type="radio" name="rdSituacao" id="rdSituacaoNaoPago" value="@Model[1].SituacaoId" >
+            @Model[1].Descricao.Trim()
+        </div>
+        <div class="form-check-inline" style="float:left;">
+            <input class="form-check-input margin-bottom" type="radio" name="rdSituacao" id="rdSituacaoAmbos" value="@ambosval" checked>
+            Ambos
+        </div>        
+    </div>    
+</div>
+<div style="display:block;" class="margin-bottom container">
+    <button id="filtrar" type="button" class="btn btn-primary">Filtrar</button>
+    <button id="Limpar" type="button" class="btn btn-primary">Limpar</button>
+</div>    
+<div id="ConteinerGridListaPedidos" class="container" style="margin-top:20px;">
+    @Html.Partial("~/Views/PartialViews/GridPedidos.cshtml")
+</div>    
+<script type="text/javascript">
+    $(function () {
+        $("#menu_principal > ul > li.listapedidos").addClass("active");
+        $("table#GridPedidos > thead > tr:first").append("<th></th>")
+
+        BlockDigit("#txtDatainicio");
+        BlockDigit("#txtDatafim");      
+
+        MascaraNome("#txtCliente");
+        MontaAjax('@Url.Action("ListaClientes", "Comanda")', "{}", function (data) {
+            $("#txtCliente").autocomplete({
+                source: data,
+                select: function (event, ui) {
+                    var dados = ui.item.value.split(" - ");
+                    $("#hdnClienteId").val(dados[0]);                    
+                }
+            });
+        });
+
+        MascaraNome("#txtProduto");
+        MontaAjax('@Url.Action("ListaProdutos", "Comanda")', "{}", function (data) {
+            $("#txtProduto").autocomplete({
+                source: data,
+                select: function (event, ui) {
+                    var dados = ui.item.value.split(" - ");
+                    $("#hdnProdutoId").val(dados[0]);                    
+                }
+            });
+        });
+
+        $("#txtDatainicio").datepicker();
+
+        $("#txtDatainicio").focusin(function () {
+            $("#ui-datepicker-div").hover(function () {
+                $("#ui-datepicker-div > table > tbody > tr > td > a").on("click", function () {
+                    $("#txtDatafim").prop("disabled", false);
+
+                });
+            });
+        });
+
+        $("#txtDatainicio").change(function () {
+            var datesplit = $("#txtDatainicio").val().split('/');
+            $("#txtDatafim").datepicker("destroy");
+            $("#txtDatafim").datepicker({ minDate: new Date(parseInt(datesplit[2]), parseInt(datesplit[1]) - 1, parseInt(datesplit[0])) });
+            $("#txtDatafim").val("");
+        });
+
+        $("#filtrar").on("click", function () {
+            var ClienteId = $.trim($("#txtCliente").val()) == "" ? 0 : parseInt($("#hdnClienteId").val());
+            var ProdutoId = $.trim($("#txtProduto").val()) == "" ? 0 : parseInt($("#hdnProdutoId").val());
+
+            var existinicio = $.trim($("#txtDatainicio").val()).length > 0 ? $.trim($("#txtDatainicio").val()) : "01/01/2000";
+            var existfim = $.trim($("#txtDatafim").val()).length > 0 ? $.trim($("#txtDatafim").val()) : "01/01/2000";
+            
+            if (existfim == "01/01/2000") {
+                existfim = existinicio;
+                $("#txtDatafim").val(existfim);
+            }
+
+            var datainiciosp = existinicio.split('/');
+            var datafimsp = existfim.split('/');
+
+            var ninicio = new Date(parseInt(datainiciosp[2]), parseInt(datainiciosp[1]) - 1, parseInt(datainiciosp[0]));
+            var nfim = new Date(parseInt(datafimsp[2]), parseInt(datafimsp[1]) - 1, parseInt(datafimsp[0]));
+
+            gridpedidosparam.ClienteId = ClienteId;
+            gridpedidosparam.ProdutoId = ProdutoId;
+            gridpedidosparam.DataInicio = ninicio;
+            gridpedidosparam.DataFim = nfim;
+            gridpedidosparam.Situacao = $("div#FiltroPedidos > div > div > input[name='rdSituacao']:checked").val();
+            
+            GridPedidosLoad(gridpedidosparam);
+
+        });
+
+        $("#Limpar").on("click", function () {
+            $("#hdnClienteId").val("");
+            $("#txtCliente").val("");
+            $("#hdnProdutoId").val("");
+            $("#txtProduto").val("");            
+            $("#txtDatainicio").val("");
+            $("#txtDatafim").val("");
+            $("div#FiltroPedidos > div > div > input[name='rdSituacao']:last").prop("checked", true);
+        });
+        
+    });
+
+    function BlockDigit(objeto)
+    {        
+        $(objeto).css("background-color", "#eee");
+        $(objeto).keydown(function (event) {
+            event.preventDefault();
+        });
+    }
+</script>

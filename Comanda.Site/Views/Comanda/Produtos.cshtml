@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Produtos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="ConteinerGridProduto" style="width:100%;">
+    @Html.Partial("~/Views/PartialViews/GridProdutos.cshtml")
+</div>
+<div id="ConteinerEditarProduto">
+    @Html.Partial("~/Views/PartialViews/EditarProduto.cshtml", new Comanda.Model.Classes.ProdutoModel())
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#menu_principal > ul > li.produtos").addClass("active");
+    });
+</script>

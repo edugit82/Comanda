@@ -1,0 +1,74 @@
+﻿@model Comanda.Site.ViewModels.PedidosViewModel
+
+<style type="text/css">
+    .modal-body .form-horizontal .col-sm-2,
+    .modal-body .form-horizontal .col-sm-10 {
+        width: 100%;
+    }
+
+    .modal-body .form-horizontal .control-label {
+        text-align: left;
+    }
+
+    .modal-body .form-horizontal .col-sm-offset-2 {
+        margin-left: 15px;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalProduto" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Fechar</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Produto não cadastrado, deseja cadastra-lo?
+                </h4>
+            </div>
+
+            <!-- Modal Body -->            
+            <div class="container">
+                <div class="row">
+                    <label class="form-control-static control-label col-md-4" for="ModalProdutoDesc">Produto:</label>
+                    <p class="form-control-static col-md-8" id="ModalProdutoDesc">@Model.Produto</p>
+                </div>
+                <div class="row">
+                    <label class="form-control-static control-label col-md-4" for="ModalProdutoPreco">Preço:</label>
+                    <p class="form-control-static col-md-8" id="ModalProdutoPreco">@Model.Preco.ToString("0.00")</p>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"> Não </button>
+                <button type="button" class="btn btn-primary" id="ModalProdutoSalvar"> Sim </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    $("#ModalProdutoSalvar").on("click", function () {
+        var form = {
+            "Produto": $("#ModalProdutoDesc").text(),
+            "Preco": $("#ModalProdutoPreco").text()
+        };
+        
+        MontaAjax('@Url.Action("SalvaProduto", "Comanda")', form, function (data) {
+            
+            $("#hdnProdutoId").val(data.ProdutoId);
+            $("#txtProduto").val(data.Descricao);
+            $("#txtPreco").val(data.Preco);
+                        
+            $("#ModalProduto").modal("hide");
+        });
+
+    });
+</script>

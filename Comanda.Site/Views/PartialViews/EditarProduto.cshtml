@@ -1,0 +1,61 @@
+﻿@model Comanda.Model.Classes.ProdutoModel
+
+<style type="text/css">
+    #EditaProduto {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #ModalEditarProduto > div > div > div.modal-header > h4 {
+        margin-left: 10px;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalEditarProduto" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar Produto</h4>
+            </div>
+            <div class="modal-body">
+                <div id="EditaProduto" class="form-group row">
+                    <input type="hidden" id="hdnProdutoId" value="@Model.ProdutoId">
+                    <label for="txtProduto" class="margin-top">Produto:</label>
+                    <input type="text" class="form-control margin-bottom" id="txtProduto" autocomplete="off" placeholder="Ex: Skol,Brahma,chicletinho,etc." value="@Model.Descricao">
+                    
+                    <label for="txtPreco" class="margin-top">Preço:</label>
+                    <input type="text" class="form-control" style="width:20%;" id="txtPreco" value="@Model.Preco.ToString("0.00")">
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="EnviarEditarProduto" type="button" class="btn btn-primary" data-dismiss="modal">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        MascaraMaiuscula($("#EditaProduto > #txtProduto"));
+        MascaraPreco($("#EditaProduto > #txtPreco"));
+
+        $("#EnviarEditarProduto").on("click", function () {
+            var model =
+                {
+                    "ProdutoId": $("#EditaProduto > #hdnProdutoId").val(),
+                    "Descricao": $("#EditaProduto > #txtProduto").val(),
+                    "Preco": $("#EditaProduto > #txtPreco").val()
+                };
+
+            MontaAjax('@Url.Action("AtualizaDadosProduto", "Comanda")', model, function (data) {
+                GridProdutosLoad();
+            });
+
+        });
+    });
+</script>

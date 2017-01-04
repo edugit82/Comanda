@@ -1,0 +1,56 @@
+﻿<style type="text/css">
+    #ImgSuccess
+    {        
+        width:100px;
+        height:100px;
+    }
+    #texto
+    {
+        text-align:center;
+        text-transform:uppercase;
+        color:#4CAF50;
+    }
+    #dvimg
+    {
+        margin-left: 40%;  
+    }
+    #dvtext
+    {
+       
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalSucesso" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvimg">
+                    <img id="ImgSuccess" src="~/Content/images/success.png" />
+                </div>
+                <div id="dvtext">
+                    <p id="texto">Pedido criado com sucesso.</p>
+                </div>
+                </div>
+            <div class="modal-footer">
+                <button id="SucessoOk" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#SucessoOk").on("click", function () {               
+        LimpaFormulario();
+        $("#collapseProduto").collapse("hide");
+        GridPedidosLoad(gridpedidosparam);
+    });    
+</script>

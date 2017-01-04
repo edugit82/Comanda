@@ -10,8 +10,9 @@ namespace Comanda.Model.Classes
         {
             this.Pedidos = new HashSet<PedidosModel>();            
         }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]        
         public int SituacaoId { get; set; }
         public string Descricao { get; set; }
         /// <summary>

@@ -9,24 +9,27 @@ namespace Comanda.DataAccess.Views
 {
     public static class PedidosView
     {
-        public static List<PedidosViewModel> ListaTotal()
+        public static List<VPedidosModel> ListaTotal
         {
-            var retorno = new List<PedidosViewModel>();
+            get
+            {
+                var retorno = new List<VPedidosModel>();
 
-            try
-            {
-                using (var context = new PedidosContext())
+                try
                 {
-                    retorno = context.Database.SqlQuery<PedidosViewModel>("select * from PedidosView (nolock)").ToList();
+                    using (var context = new PedidosContext())
+                    {
+                        retorno = context.Database.SqlQuery<VPedidosModel>("select * from PedidosView (nolock)").ToList();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    new Excecao.Excecao().GravaExcecao(ex, "{}");
+                    throw ex;
+                }
+
+                return retorno;
             }
-            catch (Exception ex)
-            {
-                new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
-            }
-            
-            return retorno;
-        }
+        }        
     }
 }

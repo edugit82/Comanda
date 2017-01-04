@@ -1,0 +1,212 @@
+﻿@{
+    ViewBag.Title = "Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   }
+
+@model Comanda.Site.ViewModels.PedidosViewModel
+
+<div id="form" class="form-group row container">
+    <div class="collapse" id="collapseCliente">        
+       <input type="hidden" id="hdnClienteId">
+       <label for="txtNome">Nome/Apelido:</label>
+       <input type="text" class="form-control margin-bottom" id="txtNome" autocomplete="off" placeholder="Ex: Eduardo,Pedrinho,Confirma,etc.">
+       
+       <label for="txtComentario" >Comentário:</label>
+       <input type="text" class="form-control margin-bottom" id="txtComentario" placeholder="Ex: Meu vizinho, mora na esquina, primo de fulano,etc.">
+              
+    </div>
+    <div class="collapse" id="collapseProduto">        
+       <input type="hidden" id="hdnProdutoId">
+       <label for="txtProduto" class="margin-top">Produto:</label>
+       <input type="text" class="form-control margin-bottom" id="txtProduto" autocomplete="off" placeholder="Ex: Skol,Brahma,chicletinho,etc.">
+       
+       <label for="txtPreco" class="margin-top">Preço:</label>
+       <input type="text" class="form-control margin-bottom" style="width:20%;" id="txtPreco">       
+     </div>
+     
+     <label for="txtQtd" class="margin-top">Quantidade:</label>
+     <input type="text" class="form-control margin-bottom" style="width:10%;" id="txtQtd" value="1">     
+
+    <div style="width:150px;display:inline;" class="margin-bottom">
+        <label style="float:left;">
+            <input class="form-check-input" type="radio" name="rdSituacao" id="rdSituacaoPago" value="@Model.ListaSituacao[0].SituacaoId">
+            @Model.ListaSituacao[0].Descricao.Trim()
+        </label>
+        <label class="form-check-inline" style="float:left;">
+            <input class="form-check-input" type="radio" name="rdSituacao" id="rdSituacaoNaoPago" value="@Model.ListaSituacao[1].SituacaoId" checked>
+            @Model.ListaSituacao[1].Descricao.Trim()
+        </label>
+    </div>
+    <div style="clear:both;" class="margin-bottom"></div>
+        <button id="btnEnviar" type="button" class="btn btn-primary margin-bottom" style="display:block;">Enviar</button>
+
+        <label class="margin-bottom">Últimos 10 pedidos:</label>
+        <div id="ConteinerGridPedidos" style="width:100%;">
+            @Html.Partial("~/Views/PartialViews/GridPedidos.cshtml")
+        </div>
+</div>
+
+     <script type="text/javascript">
+         $(function () {
+             $("#menu_principal > ul > li.pedidos").addClass("active");
+             MascaraPreco("#txtPreco");
+             MascaraNumero("#txtQtd");
+             MascaraMaiuscula("#txtNome");
+             MascaraNome("#txtComentario");
+             MascaraMaiuscula("#txtProduto");
+                  
+             MontaAjax('@Url.Action("ListaClientes", "Comanda")', "{}", function (data) {
+                 $("#txtNome").autocomplete({
+                     source: data,
+                     select: function (event, ui) {
+                         var dados = ui.item.value.split(" - ");
+                         $("#hdnClienteId").val(dados[0]);
+                         $("#txtComentario").val(dados.length > 2 ? dados[2] : "");
+                     },
+                     change: function (event, ui) {
+                         if (ui.item !== null) {
+                             var dados = ui.item.value.split(" - ");
+                             $("#txtNome").val(dados[1]);
+                         }
+                     }
+                 });
+             });
+     
+             MontaAjax('@Url.Action("ListaProdutos", "Comanda")', "{}", function (data) {
+                 $("#txtProduto").autocomplete({
+                     source: data,
+                     select: function (event, ui) {
+                         var dados = ui.item.value.split(" - ");
+                         $("#hdnProdutoId").val(dados[0]);
+                         $("#txtPreco").val(dados[2]);
+                     },
+                     change: function (event, ui) {
+                         if (ui.item !== null) {
+                             var dados = ui.item.value.split(" - ");
+                             $("#txtProduto").val(dados[1]);
+                         }
+                     }
+                 });
+             });
+     
+             $("#collapseCliente").collapse("show");
+
+             $("table#GridPedidos").ready(function () {
+                 GridPedidosLoad(gridpedidosparam);                 
+             });            
+             
+         });
+     
+         $("#btnEnviar").on("click", function () {
+                  
+             var form = JsonParametros();
+             var valida = ValidaFormulario(form);
+     
+             if (valida) {
+                 RetornaPartialView('@Url.Action("CadastraPedidos", "Comanda")', form, function (data) {
+                     $("#partialviewsucesso").html(data);
+                     $("#ModalSucesso").modal("show");
+                 });
+             }
+     
+         });
+     
+         function JsonParametros() {
+             var form =
+             {
+                 "ClienteId": $("#hdnClienteId").val(),
+                 "ProdutoId": $("#hdnProdutoId").val(),
+                 "Qtd": $("#txtQtd").val(),
+                 "Preco": $("#txtPreco").val(),
+                 "SituacaoId": $("#form > div > label > input[type='radio']:checked").val()
+             }
+     
+             return form;
+         }
+     
+         function ValidaFormulario(param) {
+             var valida = true;
+     
+             $(".alert").alert('close');
+             valida = ValidaCliente(param.ClienteId, valida);
+             valida == true ? $("#collapseProduto").collapse("show") : $("#collapseProduto").collapse("hide");
+             valida = ValidaProduto(param.ProdutoId, valida);
+     
+             if (isNaN(parseInt(param.Qtd)) || parseInt(param.Qtd) < 1) {
+                 $("#txtQtd").after(MontaAlert("ErroQtd", "Quantidade inválida."));                 
+                 valida = valida ? false : valida;
+             }
+     
+             return valida;
+         }
+     
+         function ValidaCliente(ClienteId, valida) {                
+             ClienteId = $.trim($("#txtNome").val()) == "" ? "" : ClienteId;
+
+             if (isNaN(parseInt(ClienteId))) {
+                 valida = false;
+     
+                 if ($.trim($("#txtNome").val()) == "") {                                                               
+                     $("#txtNome").after(MontaAlert("ErroNome", "Nome do cliente está em branco."));                     
+                     valida = valida ? false : valida;
+                 }
+                 else {
+                     if ($.trim($("#txtNome").val()).length < 3) {
+                         $("#txtNome").after(MontaAlert("ErroNome", "Nome necessita de no mínimo 3 letras."));                         
+                         valida = valida ? false : valida;
+                     }
+                     else {
+                         var form = { "Nome": $.trim($("#txtNome").val()), "Comentario": $.trim($("#txtComentario").val()) }
+                         RetornaPartialView('@Url.Action("ClienteCadastro","Comanda")', form, function (data) {
+                             $("#partialviewcliente").html(data);
+                             $("#ModalClienteCadastro").modal("show");
+                         });
+                     }
+                 }
+             }
+             else {
+                 valida = true;
+             }                
+             return valida;
+         }
+     
+         function ValidaProduto(ProdutoId, valida) {
+             ProdutoId = $.trim($("#txtProduto").val()) == "" ? "" : ProdutoId;
+
+             if (isNaN(parseInt(ProdutoId))) {
+                 var localvalida = true;
+                 valida = false;
+     
+                 if ($.trim($("#txtProduto").val()) == "") {                     
+                     $("#txtProduto").after(MontaAlert("ErroProduto", "Descrição do produto está em branco."));                     
+                     valida = valida ? false : valida;
+                     localvalida = false;
+                 }
+     
+                 if ($.trim($("#txtPreco").val()) == "") {
+                     $("#txtPreco").after(MontaAlert("ErroPreco", "Preço está em branco."));                     
+                     valida = valida ? false : valida;
+                     localvalida = false;
+                 }
+     
+                 if (localvalida) {
+                     var form = { "Produto": $.trim($("#txtProduto").val()), "Preco": $.trim($("#txtPreco").val()) }
+                     RetornaPartialView('@Url.Action("ProdutoCadastro","Comanda")', form, function (data) {
+                         $("#partialviewproduto").html(data);
+                         $("#chamamodalproduto").click();
+                         $("#ModalProduto").modal("show");
+                     });
+                 }
+             }
+             else {
+                 valida = true;
+             }
+     
+             return valida;
+         }
+         function MontaAlert(id, texto) {
+             return '<div id="'+id+'" class="alert alert-danger" role="alert"><strong>'+texto+'</strong></div>';
+         }
+     
+     </script>
+

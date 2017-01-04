@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Language" content="pt-br">
+   
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Styles.Render("//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+    @Scripts.Render("~/Scripts/jquery-3.1.1.min.js")
+    @Scripts.Render("~/Scripts/jquery-ui.min.js")                
+    @Styles.Render("~/Content/bootstrap.4.0.0.min.css")    
+    @Styles.Render("~/Content/bootstrap.min.css")        
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Styles.Render("~/Content/bootstrap-theme.min.css")
+    @Styles.Render("~/Content/StyleLayout.css")    
+    @Scripts.Render("~/Scripts/Mascara.js")   
+
+    <script type="text/javascript">
+
+        jQuery(function ($) {
+            $.datepicker.regional['pt'] = {
+                closeText: 'Fechar',
+                prevText: '<Anterior',
+                nextText: 'Seguinte',
+                currentText: 'Hoje',
+                monthNames: ['Janeiro', 'Fevereiro', 'Mar&ccedil;o', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                dayNames: ['Domingo', 'Segunda-feira', 'Ter&ccedil;a-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'S&aacute;bado'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'S&aacute;b'],
+                dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'S&aacute;b'],
+                weekHeader: 'Sem',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['pt']);
+        });
+
+        $(function () {
+            $("#menu_principal > ul > li").removeClass("active");
+            $(document.body).ready(function () {
+                $("#loading").css("display", "none");
+            });
+        });
+        function MontaAjax(url, parametros, sucesso) {
+            CriaAjax(url, parametros, sucesso, "json");
+        }
+        function RetornaPartialView(url, parametros, sucesso) {
+            CriaAjax(url, parametros, sucesso, "html");
+        }
+        function CriaAjax(url, parametros, sucesso, datatype) {
+            $.ajax({
+                type: "POST",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                method: "POST",
+                dataType: datatype,
+                data: JSON.stringify(parametros),
+                success: sucesso,
+                beforeSend: function () {
+                    $("#loading").css("display", "block");
+                },
+                complete: function () {
+                    $("#loading").css("display", "none");
+                }
+            });
+        }
+        function LimpaFormulario()
+        {
+            $("#hdnClienteId").val("");
+            $("#txtNome").val("");
+            $("#txtComentario").val("");
+            $("#hdnProdutoId").val("");
+            $("#txtProduto").val("");
+            $("#txtPreco").val("");
+            $("#txtQtd").val("1");
+            $("#rdSituacaoNaoPago").prop("checked", true);
+        }
+        function StringToDateTime(datahora)
+        {
+            var split = datahora.split(' ');
+            var datasp = split[0].split('/');
+            var horasp = split[1].split(':');
+
+            var datetime = new Date(parseInt(datasp[2]), parseInt(datasp[1]) - 1, parseInt(datasp[0]), parseInt(horasp[0]), parseInt(horasp[1]), parseInt(horasp[2]));
+            
+            return datetime;
+        }
+
+    </script>
+
+</head>
+<body>
+    <div id="menu_principal">
+        <ul class="nav nav-tabs nav-justified">
+            <li role="presentation" class="active pedidos">@Html.ActionLink("Pedidos", "Pedidos", "Comanda")</li>
+            <li role="presentation" class="clientes">@Html.ActionLink("Clientes", "Clientes", "Comanda")</li>
+            <li role="presentation" class="produtos">@Html.ActionLink("Produtos", "Produtos", "Comanda")</li>
+            <li role="presentation" class="listapedidos">@Html.ActionLink("ListaPedidos", "ListaPedidos", "Comanda")</li>            
+        </ul>
+    </div>
+    
+    @RenderBody()
+
+    @RenderSection("scripts", required: false)
+    @Html.Partial("~/Views/PartialViews/Loading.cshtml")
+    <div id="partialviewcliente">
+        @Html.Partial("~/Views/PartialViews/CadastraCliente.cshtml", new Comanda.Site.ViewModels.PedidosViewModel())
+    </div>
+    <div id="partialviewproduto">
+        @Html.Partial("~/Views/PartialViews/CadastraProduto.cshtml", new Comanda.Site.ViewModels.PedidosViewModel())
+    </div>
+    <div id="partialviewsucesso">
+        @Html.Partial("~/Views/PartialViews/Sucesso.cshtml")
+    </div>
+    
+</body>
+</html>
+

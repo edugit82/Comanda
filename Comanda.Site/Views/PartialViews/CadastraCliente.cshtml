@@ -1,0 +1,73 @@
+﻿@model Comanda.Site.ViewModels.PedidosViewModel
+
+<style type="text/css">
+
+.modal-body .form-horizontal .col-sm-2,
+.modal-body .form-horizontal .col-sm-10 {
+    width: 100%
+}
+
+.modal-body .form-horizontal .control-label {
+    text-align: left;
+}
+.modal-body .form-horizontal .col-sm-offset-2 {
+    margin-left: 15px;
+}
+
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalClienteCadastro" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Fechar</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                   Cliente não cadastrado, deseja cadastra-lo?
+                </h4>
+            </div>
+            <!-- Modal Body -->            
+            <div class="container">
+                <div class="row">
+                    <label class="form-control-static control-label col-md-4" for="ModalClienteNome">Nome/Apelido:</label>
+                    <p class="form-control-static col-md-8" id="ModalClienteNome">@Model.Nome</p>
+                </div>
+                <div class="row">
+                    <label class="form-control-static control-label col-md-4" for="ModalClienteComentario">Comentário:</label>
+                    <p class="form-control-static col-md-8" id="ModalClienteComentario">@Model.Comentario</p>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"> Não </button>
+                <button type="button" class="btn btn-primary" id="ModalClienteSalvar"> Sim </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">   
+
+    $("#ModalClienteSalvar").on("click", function () {
+        var form = {
+            "Nome": $("#ModalClienteNome").text(),
+            "Comentario": $("#ModalClienteComentario").text()
+        };
+                
+        MontaAjax('@Url.Action("SalvaCliente", "Comanda")', form, function (data) {            
+            $("#hdnClienteId").val(data.ClienteId);
+            $("#txtNome").val(data.Nome);
+            $("#txtComentario").val(data.Comentario);
+
+            $("#ModalClienteCadastro").modal("hide");
+            $("#collapseProduto").collapse("show");
+        });
+        
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿<div class="container">
+    <table class="table table-hover" id="GridClientes">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Comentário</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    function GridClientesLoad() {        
+        MontaAjax('@Url.Action("CarregaClientes", "Comanda")', "{}", function (data) {
+            $("table#GridClientes > tbody").empty();
+            for (var x in data) {
+                $("table#GridClientes > tbody").append(
+                    '<tr>' +
+                      '<th scope="row">' + data[x].ClienteId + '</th>' +
+                      '<td>' + data[x].Nome + '</td>' +
+                      '<td>' + data[x].Comentario + '</td>' +
+                      '<td><a href="#GridClientes" class="editar" title="' + data[x].Editar + '"><img style="width:30px;height:30px;" src="@Url.Content("~/Content/images/editar.png")" /></a>' +
+                    '</tr>'
+                );
+            }
+
+            $(".editar").on("click", function () {
+                var param = { "Id": $(this).attr("title") };
+                RetornaPartialView('@Url.Action("EditarCliente", "Comanda")', param, function (data) {
+                    $("#ConteinerEditarCliente").html(data);
+                    $("#ModalEditarCliente").modal("show");
+                });
+            });
+        });
+    }
+
+    $("table#GridClientes").ready(function () {
+        GridClientesLoad();
+    });
+</script>

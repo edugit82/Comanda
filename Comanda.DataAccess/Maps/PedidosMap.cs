@@ -11,6 +11,7 @@ namespace Comanda.DataAccess.Maps
 
             Property(x => x.DataHora).HasColumnName("DataHora");
             Property(x => x.Qtd).HasColumnName("Qtd");
+            Property(x => x.Preco).HasColumnName("Preco");
 
             Property(x => x.ClienteId).HasColumnName("ClienteId");
             Property(x => x.ProdutoId).HasColumnName("ProdutoId");

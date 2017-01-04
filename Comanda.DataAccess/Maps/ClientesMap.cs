@@ -1,5 +1,9 @@
 ﻿using Comanda.Model.Classes;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 using System.Data.Entity.ModelConfiguration;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Comanda.DataAccess.Maps
 {
@@ -9,7 +13,7 @@ namespace Comanda.DataAccess.Maps
         {
             HasKey(x => x.ClienteId);
 
-            Property(x => x.ClienteId).HasColumnName("ClientId");
+            Property(x => x.ClienteId).HasColumnName("ClienteId");            
             Property(x => x.Nome).HasColumnName("Nome");
             Property(x => x.Comentario).HasColumnName("Comentario");
 

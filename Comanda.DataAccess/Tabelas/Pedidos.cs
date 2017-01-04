@@ -33,13 +33,8 @@ namespace Comanda.DataAccess.Tabelas
                 {
                     try
                     {
-                        var entity = context.Pedidos.Find(model.DataHora);
-
-                        context.Pedidos.Remove(entity);
-                        context.SaveChanges();
-
-                        context.Pedidos.Add(model);
-                        context.SaveChanges();
+                        context.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                        context.SaveChanges();        
 
                         transaction.Commit();
 
@@ -70,24 +65,27 @@ namespace Comanda.DataAccess.Tabelas
                 throw ex;
             }
         }
-        public static List<PedidosModel> ListaTotal()
+        public static List<PedidosModel> ListaTotal
         {
-            var retorno = new List<PedidosModel>();
-
-            try
+            get
             {
-                using (var context = new PedidosContext())
+                var retorno = new List<PedidosModel>();
+
+                try
                 {
-                    retorno = context.Pedidos.OrderBy(x => x.DataHora).ToList();
+                    using (var context = new PedidosContext())
+                    {
+                        retorno = context.Pedidos.OrderBy(x => x.DataHora).ToList();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
-            }
+                catch (Exception ex)
+                {
+                    new Excecao.Excecao().GravaExcecao(ex, "{}");
+                    throw ex;
+                }
 
-            return retorno;
-        }
+                return retorno;
+            }
+        }        
     }
 }

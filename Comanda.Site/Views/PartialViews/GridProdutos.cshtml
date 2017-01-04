@@ -1,0 +1,43 @@
+﻿<div class="container">
+    <table class="table table-hover" id="GridProdutos">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function GridProdutosLoad() {
+        MontaAjax('@Url.Action("CarregaProdutos", "Comanda")', "{}", function (data) {
+            $("table#GridProdutos > tbody").empty();
+            for (var x in data) {
+                $("table#GridProdutos > tbody").append(
+                    '<tr>' +
+                      '<th scope="row">' + data[x].ProdutoId + '</th>' +
+                      '<td>' + data[x].Descricao + '</td>' +
+                      '<td>' + data[x].Preco + '</td>' +
+                      '<td><a href="#GridClientes" class="editar" title="' + data[x].Editar + '"><img style="width:30px;height:30px;" src="@Url.Content("~/Content/images/editar.png")" /></a>' +
+                    '</tr>'
+                );
+            }
+
+            $(".editar").on("click", function () {
+                var param = { "Id": $(this).attr("title") };
+                RetornaPartialView('@Url.Action("EditarProduto", "Comanda")', param, function (data) {
+                    $("#ConteinerEditarProduto").html(data);
+                    $("#ModalEditarProduto").modal("show");
+                });
+            });
+        });
+    }
+
+    $("table#GridProdutos").ready(function () {
+        GridProdutosLoad();
+    });
+</script>
