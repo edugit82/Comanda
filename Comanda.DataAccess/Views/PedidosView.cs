@@ -25,7 +25,7 @@ namespace Comanda.DataAccess.Views
                 catch (Exception ex)
                 {
                     new Excecao.Excecao().GravaExcecao(ex, "{}");
-                    throw ex;
+                    throw;
                 }
 
                 return retorno;

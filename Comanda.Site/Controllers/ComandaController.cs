@@ -30,7 +30,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw; 
             }           
 
             return View(viewmodel);
@@ -73,7 +73,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             
             return PartialView("~/Views/PartialViews/Sucesso.cshtml");
@@ -115,7 +115,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
 
             return retorno;
@@ -147,7 +147,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
 
             return retorno;
@@ -169,7 +169,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             
             return retorno; 
@@ -187,7 +187,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
 
             return retorno; 
@@ -206,7 +206,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             return retorno;
         }
@@ -222,7 +222,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             return retorno;
         }
@@ -238,7 +238,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             return retorno;
         }
@@ -254,7 +254,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             return retorno;
         }
@@ -270,7 +270,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             return retorno;
         }
@@ -287,7 +287,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             
             return retorno;
@@ -305,7 +305,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
 
             return retorno;
@@ -357,7 +357,7 @@ namespace Comanda.Site.Controllers
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
             
             return retorno;

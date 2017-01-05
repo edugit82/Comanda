@@ -22,7 +22,7 @@ namespace Comanda.DataAccess.Tabelas
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
         }
         public static void Update(PedidosModel model)
@@ -44,7 +44,7 @@ namespace Comanda.DataAccess.Tabelas
                         transaction.Rollback();
 
                         new Excecao.Excecao().GravaExcecao(ex, "{}");
-                        throw ex;
+                        throw;
                     }
                 }
             }
@@ -62,7 +62,7 @@ namespace Comanda.DataAccess.Tabelas
             catch (Exception ex)
             {
                 new Excecao.Excecao().GravaExcecao(ex, "{}");
-                throw ex;
+                throw;
             }
         }
         public static List<PedidosModel> ListaTotal
@@ -81,7 +81,7 @@ namespace Comanda.DataAccess.Tabelas
                 catch (Exception ex)
                 {
                     new Excecao.Excecao().GravaExcecao(ex, "{}");
-                    throw ex;
+                    throw;
                 }
 
                 return retorno;
