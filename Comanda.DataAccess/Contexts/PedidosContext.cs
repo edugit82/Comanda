@@ -9,7 +9,7 @@ namespace Comanda.DataAccess.Contexts
     {
         public PedidosContext() : base("PedidosContext")
         {
-
+            Database.SetInitializer<PedidosContext>(null);
         }
         public DbSet<ClienteModel> Clientes { get; set; }
         public DbSet<ProdutoModel> Produtos { get; set; }

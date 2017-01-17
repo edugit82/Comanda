@@ -11,7 +11,7 @@ namespace Comanda.Model.Classes
     {
         public ProdutoModel()
         {
-            this.Pedidos = new HashSet<PedidosModel>();            
+            
         }
         /// <summary>
         /// Chave primária da tabela Produto

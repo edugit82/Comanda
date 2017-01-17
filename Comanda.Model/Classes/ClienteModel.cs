@@ -11,7 +11,7 @@ namespace Comanda.Model.Classes
     {
         public ClienteModel()
         {
-            this.Pedidos = new HashSet<PedidosModel>();            
+            
         }
         /// <summary>
         /// Chave Primária da Tabela Cliente

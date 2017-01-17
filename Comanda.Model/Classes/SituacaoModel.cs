@@ -8,7 +8,7 @@ namespace Comanda.Model.Classes
     {
         public SituacaoModel()
         {
-            this.Pedidos = new HashSet<PedidosModel>();            
+            
         }
 
         [Key]
