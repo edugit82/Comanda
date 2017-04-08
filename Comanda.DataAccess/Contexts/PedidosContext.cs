@@ -18,6 +18,8 @@ namespace Comanda.DataAccess.Contexts
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Database.SetInitializer<PedidosContext>(null);
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             
             modelBuilder.Configurations.Add(new ClientesMap());
